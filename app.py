@@ -6,7 +6,7 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler
 
 # Load model
-model = load_model("model_produksi_tanaman.h5")
+model = load_model("model_produksi_tanaman.h5", compile=False)
 
 # Judul aplikasi
 st.title("Prediksi Produksi Tanaman Pangan di Sumatera")
