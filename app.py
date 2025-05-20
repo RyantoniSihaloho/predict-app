@@ -8,9 +8,9 @@ from sklearn.preprocessing import StandardScaler
 
 # Load model
 model = load_model("model_produksi_tanaman.h5")
-model.save("model_saved_format")
+model.save("model_saved_format.h5")
 
-model = tf.keras.models.load_model("model_saved_format")
+model = tf.keras.models.load_model("model_saved_format.h5")
 
 # Judul aplikasi
 st.title("Prediksi Produksi Tanaman Pangan di Sumatera")
