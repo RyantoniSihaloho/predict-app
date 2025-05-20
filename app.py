@@ -3,10 +3,14 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from tensorflow.keras.models import load_model
+import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
 # Load model
-model = load_model("model_produksi_tanaman.h5", compile=False)
+model = load_model("model_produksi_tanaman.h5")
+model.save("model_saved_format")
+
+model = tf.keras.models.load_model("model_saved_format")
 
 # Judul aplikasi
 st.title("Prediksi Produksi Tanaman Pangan di Sumatera")
