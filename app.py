@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from tensorflow.keras.models import load_model
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
@@ -9,7 +10,6 @@ from sklearn.preprocessing import StandardScaler
 # Load model
 model = load_model("model_produksi_tanaman.h5")
 model.save("model_saved_format.h5")
-
 model = tf.keras.models.load_model("model_saved_format.h5")
 
 # Judul aplikasi
@@ -71,4 +71,24 @@ if st.button("Prediksi Produksi"):
     scaler_y.fit(y_raw)
     y_pred = scaler_y.inverse_transform(pred_scaled)
 
+    # Tampilkan hasil prediksi
     st.success(f"Prediksi Produksi: {y_pred[0][0]:,.2f} kuintal")
+
+    # Ambil data aktual untuk provinsi dan komoditas
+    df_filtered = df_raw[(df_raw['Provinsi'] == provinsi) & (df_raw['Item'] == item)]
+
+    if not df_filtered.empty:
+        produksi_aktual = df_filtered['Produksi'].mean()  # Ambil rata-rata produksi sebagai representasi
+
+        # Plot aktual vs prediksi
+        fig, ax = plt.subplots()
+        ax.bar(['Aktual', 'Prediksi'], [produksi_aktual, y_pred[0][0]], color=['blue', 'green'])
+        ax.set_ylabel('Produksi (kuintal)')
+        ax.set_title(f"Produksi Aktual vs Prediksi\n{item} di {provinsi}")
+
+        for i, v in enumerate([produksi_aktual, y_pred[0][0]]):
+            ax.text(i, v + max([produksi_aktual, y_pred[0][0]]) * 0.01, f"{v:,.2f}", ha='center')
+
+        st.pyplot(fig)
+    else:
+        st.warning("Data aktual tidak tersedia untuk kombinasi Provinsi dan Komoditas ini.")
